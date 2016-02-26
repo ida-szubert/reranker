@@ -1,0 +1,63 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{graphicx} % Required for the inclusion of images
+\usepackage{natbib} % Required to change bibliography style to APA
+\usepackage{amsmath} % Required for some math elements 
+\usepackage{subcaption}
+\usepackage[justification=centering]{caption}
+\usepackage[nomarkers,figuresonly,nofiglist]{endfloat}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{sectsty}
+\sectionfont{\fontsize{12}{15}\selectfont}
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+\usepackage{todonotes}
+\usepackage{units} % for nice fractions \nicefrac{}{}
+\usepackage[hidelinks=true]{hyperref}
+\def\labelitemi{--}
+
+\renewcommand{\labelenumi}{\alph{enumi}.} % Make numbering in the enumerate environment by letter rather than number
+
+%%%%%%%%%% Start TeXmacs macros
+\newcommand{\nocomma}{}
+\newcommand{\noplus}{}
+\newcommand{\tmop}[1]{\ensuremath{\operatorname{#1}}}
+\newcommand{\upl}{+}
+%%%%%%%%%% End TeXmacs macros
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Machine Translation Assignment 2: Decoding} % Title
+
+\author{s0907677, s1520582} % Author name
+
+\date{}
+
+\begin{document}
+
+\maketitle % Insert the title, author and date
+
+\input{questions/1}
+\input{questions/2}
+\input{questions/3}
+\input{questions/4}
+\input{questions/5}
+\input{questions/6}
+\input{questions/7}
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+\bibliographystyle{apalike}
+
+\bibliography{bibliography}
+
+%----------------------------------------------------------------------------------------
+
+
+\end{document}

@@ -1,0 +1,13 @@
+\section*{Q4}
+
+In our implementation, the mapping from hypotheses to stacks is the same in
+the decoder with local reordering as it was in the one without. Each
+hypothesis is placed on a stack corresponding to the index of the last French
+word being translated. We do not create hypotheses in which French phrases
+are skipped, but instead always look at two consecutive phrases, swap them,
+and create a hypothesis which covers both phrases. This means that mapping
+onto stacks is straightforward, since the number of French words covered by
+a hypothesis is always the same as the index of the last word which it
+translates. In short, the hypotheses we generate do not have gaps
+in coverage of the source sentence and can be simply placed on the stack
+corresponding to the last word covered.

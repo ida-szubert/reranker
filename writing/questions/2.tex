@@ -1,0 +1,26 @@
+\section*{Q2}
+When local reordering is allowed, the search space expands, since at each step we need to consider three possible sources of the next part of the English translation:
+\begin{itemize}
+	\item the next French phrase (as was always the case in the monotone decoder);
+	\item the second next French phrase;
+	\item the previous French phrase.
+\end{itemize}
+The latter two cases account for the fact that hypotheses might be created by skipping one French phrase and translating a next one. If that was the way a hypothesis was generated, the only way of extending it is to go back and translate the skipped part.
+
+Instead of modelling explicitly these three possibilities, we decided to describe the search space more succinctly by positing that there is only one possible way of expanding a hypothesis, namely finding next two phrases and swapping them. This reformulation is possible thanks to the introduction of an artificial empty phrase, which we call the $\varepsilon$ phrase.
+
+In recursive terms, given the last word in the translation, \textit{e}, and the index of the last translated French word, \textit{j}, we are looking for such pair of indices \textit{i, c} that:
+\begin{itemize}
+	\item $i < c \leq j$
+	\item translation of French[\textit{i,c}] ends in word \textit{e}
+	\item translation of French[\textit{c,j}] proceeds translation of French[\textit{i,c}] in the English sentence
+	\item the translation and language model probability is maximized
+\end{itemize}
+Given that French[\textit{c,j}] might be the $\varepsilon$ phrase, this formulation also covers the no-reordering case.
+\vspace{4mm} %4mm vertical space
+
+Our full definition of $h(j,e)$ is specified as follows:
+\vspace{4mm} %4mm vertical space
+
+
+\input{figures/h.tex}
