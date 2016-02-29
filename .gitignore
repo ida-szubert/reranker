@@ -7,3 +7,4 @@ data/tmp*
 *.fff
 *.lof
 *.out
+.Rproj.user

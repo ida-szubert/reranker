@@ -1,15 +1,3 @@
 \section*{Q5}
 
-Our implementation of local reordering does not involve any changes to the
-hypotheses objects. We modify the translation model by inserting an empty
-phrase which translates to English as an empty string with probability 1.
 
-We introduce a modification in the hypothesis extension step. Given a
-hypothesis which ends at index \textit{i} in the French sentence we consider
-all indices \textit{c} and \textit{j} such that $c \leq j$, $j \leq
-|sentence|$, and the fragments of the sentence delimited by \textit{[i, c]}
-and \textit{[c, j]} are phrases. Since we allow for $c = j$, the second
-phrase may be the empty one we have added to the translation model. For each
-discovered pair of phrases we create a hypothesis by swapping them and
-considering $k$ best translations for each. For a pair with an empty phrase
-this amounts to no reordering.

@@ -1,26 +1,42 @@
 \section*{Q2}
-When local reordering is allowed, the search space expands, since at each step we need to consider three possible sources of the next part of the English translation:
-\begin{itemize}
-	\item the next French phrase (as was always the case in the monotone decoder);
-	\item the second next French phrase;
-	\item the previous French phrase.
-\end{itemize}
-The latter two cases account for the fact that hypotheses might be created by skipping one French phrase and translating a next one. If that was the way a hypothesis was generated, the only way of extending it is to go back and translate the skipped part.
 
-Instead of modelling explicitly these three possibilities, we decided to describe the search space more succinctly by positing that there is only one possible way of expanding a hypothesis, namely finding next two phrases and swapping them. This reformulation is possible thanks to the introduction of an artificial empty phrase, which we call the $\varepsilon$ phrase.
+Subjectively, the translations chosen with reversed language model weight are not obviously worse, or even less fluent. They do, however seem to be longer, which drives LM probability lower, e.g. "in one experiment birds quickly understood that the need to knock on the дощечке , to get hold of larva моли ." as compared to "in one experiment birds quickly realized that we should knock on дощечке to striker моли .".
 
-In recursive terms, given the last word in the translation, \textit{e}, and the index of the last translated French word, \textit{j}, we are looking for such pair of indices \textit{i, c} that:
-\begin{itemize}
-	\item $i < c \leq j$
-	\item translation of French[\textit{i,c}] ends in word \textit{e}
-	\item translation of French[\textit{c,j}] proceeds translation of French[\textit{i,c}] in the English sentence
-	\item the translation and language model probability is maximized
-\end{itemize}
-Given that French[\textit{c,j}] might be the $\varepsilon$ phrase, this formulation also covers the no-reordering case.
-\vspace{4mm} %4mm vertical space
-
-Our full definition of $h(j,e)$ is specified as follows:
-\vspace{4mm} %4mm vertical space
+In some cases reversing the bias for language model probability leads to choosing more comrehensible translations, e.g. "hunting , expanding construction and felling trees traditional for nesting complicating life to birds ." as compared to "hunt , the traditional construction and cutting trees for nesting birds complicating life ."
 
 
-\input{figures/h.tex}
+
+default.out 
+including an option to buy another 20 aircraft , actually total \$ 26 billion .
+719 stocks rose and fell 2281 and 79 were at the same level .
+some love birds , others would like to get rid of them as quickly as possible . crows centuries were part of the urban landscape , but residents complaining of the dirt and noise , many communities are becoming more .
+the first symposium on воронам , in the eastern city of лер фризии experts argued that грачей impossible out of cities .
+hunt , the traditional construction and cutting trees for nesting birds complicating life .
+in the town of зест in westphalia and the north - west йевере дипхольце , ахиме under бременом and лере big colonies , more than 600 parents .
+critics described ловлю birds in traps and забивание their sticks like special cruelty .
+сбивание nests of water or cutting trees often have undesirable consequences , " said environmental expert kaiser mandfred from lara , baden - wurttemberg .
+распугивание possible only in the next to the hospitals , nursing homes and schools .
+problem apart from the surrounding areas in cities will not be solved , says mayor лера wolfgang кельнер .
+" information stands instead бензопил " was the slogan , by a psychologist and этнологом утой maria jurgens , which stands for a different approach to birds . " we should be confident , to live with this problem . "
+wit and wits of the birds into legends . грачи often use guns , not only to приглянувшимся piece , but guns do themselves .
+in one experiment birds quickly realized that we should knock on дощечке to striker моли .
+in another study сообразительным грачам more complex task was to be resolved .
+all four birds seized проволокой , used to make hooks and hooks to catch bucket for pen and pull him out of the cylinder .
+
+
+fliplm.out 
+including the option on the purchase of another 20 aircraft , the overall volume of indeed , the \$ 26 billion .
+shares 719 companies grew up , 2281 fell , and 79 remain on the same level .
+some love birds , other would like to get rid of them as quickly as possible . ravens centuries were part of urban landscape , but residents , complaining of the dirt and noise , in many settlements becomes more and more .
+on the first symposium , devoted to воронам , in the city of лер in eastern фризии experts have argued that грачей impossible out of cities .
+hunting , expanding construction and felling trees traditional for nesting complicating life to birds .
+in the city of зест in westphalia and on the north - west йевере , дипхольце , ахиме under the бременом and лере big colony , more than 600 parental couples .
+critics of described fishing birds in traps and забивание them with sticks as special cruelty .
+сбивание nests jet water or cutting trees often have undesirable consequences , said an expert on the environmental protection manfred kaiser , from lara , baden - wurttemberg .
+распугивание only possible in the form of a exceptions next to the hospitals , nursing homes and schools .
+in isolation from the surrounding areas problem in the cities will not be solved , " lera the mayor wolfgang кельнер says .
+" information stands instead of бензопил " - was the slogan , proposed by a psychologist and этнологом утой mary yurgens , which stands for completely different approach to birds . " we should be confident in myself , in order to live with this problem . "
+mind and wits these birds are included in the legends . грачи often use guns , not only to overwhelm приглянувшимся piece , but also make guns themselves .
+in one experiment birds quickly understood that the need to knock on the дощечке , to get hold of larva моли .
+in another experiment , intelligent грачам it was necessary to solve more than difficult task .
+all four birds used the wire , to make hooks and used hooks , to helping my bucket for pen and pull him out of the cylinder .

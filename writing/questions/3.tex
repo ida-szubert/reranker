@@ -1,8 +1,30 @@
 \section*{Q3}
-For each French sentence of length $n$, we loop over all $n$ possible stacks. In each stack, we look at the top $s$ hypotheses and expand them. To perform an expansion we choose two consecutive phrases (the second of which might be $\varepsilon$), swap them, and consider all possible combinations of the first $k$ translations of each phrase. The maximum considered length of phrase is $n$. Finally, the algorithm calculates the language model probability of the generated two-phrase translation. In this step, the algorithm has to iterate over up to $2 t$ words, where $t$ is the maximum length of a translation phrase. Thus the overall complexity is as follows:
+default.out 
+BLEU: 27.35
 
-\[
-\mathcal{O}(n \cdot s) \cdot \mathcal{O}({(n \cdot k)}^2)
-\cdot \mathcal{O}(t)
-= \mathcal{O}(n^3 \cdot k^2 \cdot s \cdot t)
-\]
+Language model:
+
+	Weights: p(e|f)=0 p_lex(f|e)=0 p(e)=1
+	BLEU: 26.29
+	Weights: p(e|f)=1 p_lex(f|e)=1 p(e)=0
+	BLEU: 26.21
+	Weights: p(e|f)=1 p_lex(f|e)=1 p(e)=-1
+	BLEU: 24.63
+
+Translation model:
+	
+	Weights: p(e|f)=1 p_lex(f|e)=0 p(e)=0
+	BLEU: 26.63
+	Weights: p(e|f)=0 p_lex(f|e)=1 p(e)=1
+	BLEU: 26.70
+	Weights: p(e|f)=-1 p_lex(f|e)=1 p(e)=1
+	BLEU: 26.21
+	
+Lexicalized translation model (?)
+	Weights: p(e|f)=0 p_lex(f|e)=1 p(e)=0
+	BLEU: 25.77
+	Weights: p(e|f)=1 p_lex(f|e)=0 p(e)=1
+	BLEU: 26.43
+	Weights: p(e|f)=1 p_lex(f|e)=-1 p(e)=1
+	BLEU: 25.50
+
