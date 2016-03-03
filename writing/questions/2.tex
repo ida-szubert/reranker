@@ -1,42 +1,9 @@
 \section*{Q2}
 
-Subjectively, the translations chosen with reversed language model weight are not obviously worse, or even less fluent. They do, however seem to be longer, which drives LM probability lower, e.g. "in one experiment birds quickly understood that the need to knock on the дощечке , to get hold of larva моли ." as compared to "in one experiment birds quickly realized that we should knock on дощечке to striker моли .".
+Subjectively, the translations chosen with reversed language model weight are not obviously worse, or even less fluent. They do, however seem to be longer. Since the longer the sentence the smaller the language model probability it is to be expected that minimizing this feature value will favour longer outputs. For instance, the following two translations arguably do not differ in content, although the second uses 10 words for what the first expresses in 3: \textit{"' cold and inhuman ' : anders беринг breivik first publicly trial"}, \textit{"' cold and inhuman ' : anders fogh беринг breivik publicly appears before by the court for the first time"}.
 
-In some cases reversing the bias for language model probability leads to choosing more comrehensible translations, e.g. "hunting , expanding construction and felling trees traditional for nesting complicating life to birds ." as compared to "hunt , the traditional construction and cutting trees for nesting birds complicating life ."
+It seems that sometimes the preference for shortness leads to loss of information, e.g. compare the outputs of the default \textit{"after the summer the researchers wanted to learn more about these people ."} and LM-flipped \textit{"after summer of the tragedy the researchers want to learn more about the these people ."} rerankers. Both of these sentences are good English, and the second one is closer to the reference translation which includes the phrase \textit{"this summer's tragedy"}. In this example by reversing the LM likelihood weight we actually choose a better candidate. That information can be left out is evident from comparison of the default  \textit{"someone can use the ' language ' when answering a question : " well ... the truth ... how do i know ... as far as i know . "} and LM-flipped \textit{"somebody can use the ' qualification language ' , when responds to a difficult question : " well ... the truth ... as far as i know ... as far as i know . "}. The former simply does not include translations of the adjectives modifying \tetxit{language} and \textit{question}.
 
+There are examples of LM likelihood value actually tracking what we'd like it to track, namely English fluency and idiomaticity. The default reranker chooses \textit{"you need to keep in mind 5,000 these concepts , ideas - them all together ."] over the LM-flipped output of \textit{"you need to keep in the head of the 5,000 of ideas - these concepts , ' combining them all together ... '"}, thus exhibiting preference for the correct expression \textit{keep in mind}. Similarily, the phrase \textit{the health care law} sounds more natural than \textit{the law about the health care}
 
-
-default.out 
-including an option to buy another 20 aircraft , actually total \$ 26 billion .
-719 stocks rose and fell 2281 and 79 were at the same level .
-some love birds , others would like to get rid of them as quickly as possible . crows centuries were part of the urban landscape , but residents complaining of the dirt and noise , many communities are becoming more .
-the first symposium on воронам , in the eastern city of лер фризии experts argued that грачей impossible out of cities .
-hunt , the traditional construction and cutting trees for nesting birds complicating life .
-in the town of зест in westphalia and the north - west йевере дипхольце , ахиме under бременом and лере big colonies , more than 600 parents .
-critics described ловлю birds in traps and забивание their sticks like special cruelty .
-сбивание nests of water or cutting trees often have undesirable consequences , " said environmental expert kaiser mandfred from lara , baden - wurttemberg .
-распугивание possible only in the next to the hospitals , nursing homes and schools .
-problem apart from the surrounding areas in cities will not be solved , says mayor лера wolfgang кельнер .
-" information stands instead бензопил " was the slogan , by a psychologist and этнологом утой maria jurgens , which stands for a different approach to birds . " we should be confident , to live with this problem . "
-wit and wits of the birds into legends . грачи often use guns , not only to приглянувшимся piece , but guns do themselves .
-in one experiment birds quickly realized that we should knock on дощечке to striker моли .
-in another study сообразительным грачам more complex task was to be resolved .
-all four birds seized проволокой , used to make hooks and hooks to catch bucket for pen and pull him out of the cylinder .
-
-
-fliplm.out 
-including the option on the purchase of another 20 aircraft , the overall volume of indeed , the \$ 26 billion .
-shares 719 companies grew up , 2281 fell , and 79 remain on the same level .
-some love birds , other would like to get rid of them as quickly as possible . ravens centuries were part of urban landscape , but residents , complaining of the dirt and noise , in many settlements becomes more and more .
-on the first symposium , devoted to воронам , in the city of лер in eastern фризии experts have argued that грачей impossible out of cities .
-hunting , expanding construction and felling trees traditional for nesting complicating life to birds .
-in the city of зест in westphalia and on the north - west йевере , дипхольце , ахиме under the бременом and лере big colony , more than 600 parental couples .
-critics of described fishing birds in traps and забивание them with sticks as special cruelty .
-сбивание nests jet water or cutting trees often have undesirable consequences , said an expert on the environmental protection manfred kaiser , from lara , baden - wurttemberg .
-распугивание only possible in the form of a exceptions next to the hospitals , nursing homes and schools .
-in isolation from the surrounding areas problem in the cities will not be solved , " lera the mayor wolfgang кельнер says .
-" information stands instead of бензопил " - was the slogan , proposed by a psychologist and этнологом утой mary yurgens , which stands for completely different approach to birds . " we should be confident in myself , in order to live with this problem . "
-mind and wits these birds are included in the legends . грачи often use guns , not only to overwhelm приглянувшимся piece , but also make guns themselves .
-in one experiment birds quickly understood that the need to knock on the дощечке , to get hold of larva моли .
-in another experiment , intelligent грачам it was necessary to solve more than difficult task .
-all four birds used the wire , to make hooks and used hooks , to helping my bucket for pen and pull him out of the cylinder .
+In some cases reversing the bias for language model probability leads to choosing more comprehensible translations, e.g. the default \textit{"' this paper tiger , the army barracks , buildings and bombs without enough trained soldiers , to accomplish the mission , ' panetta said in his introductory remarks at the pentagon ."} as compared to LM-flipped \textit{"' it 's a paper tiger , the army with the barracks , buildings and bombs without enough trained soldiers , who can accomplish the mission , ' panetta said in their introductory remarks in the pentagon ."}. 

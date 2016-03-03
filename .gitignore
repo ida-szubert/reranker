@@ -7,4 +7,9 @@ data/tmp*
 *.fff
 *.lof
 *.out
-.Rproj.user
+*.Rproj.user
+*.Rproj
+*.RData
+*.Rhistory
+.idea/*
+*.R
