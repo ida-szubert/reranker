@@ -2,14 +2,12 @@
 import optparse
 import bleu
 import os
-import matplotlib.pylab as pl
-import numpy as np
 import random
 
 optparser = optparse.OptionParser()
-optparser.add_option("-t", "--kbest-training-list", dest="training_input", default="data/train.100best", help="100-best training translation lists")
+optparser.add_option("-t", "--kbest-training-list", dest="training_input", default="workdir/train.with_len.txt", help="100-best training translation lists")
 optparser.add_option("-r", "--reference", dest="reference", default="data/train.ref", help="Training target language reference sentences")
-optparser.add_option("-k", "--kbest-list", dest="input", default="data/dev+test.100best", help="100-best testing translation lists")
+optparser.add_option("-k", "--kbest-list", dest="input", default="workdir/dev+test.with_len.txt", help="100-best testing translation lists")
 (opts, _) = optparser.parse_args()
 
 
@@ -25,14 +23,6 @@ def update_param(feature, current_param_dict):
 		ref = reference[m]
 		candidates = all_hyps[m * 100:m * 100 + 100]
 		line_dict, steepest_line = define_sentence_lines(feature, candidates, current_param_dict)
-		# to see the lines on a graph
-		#xs = np.array(range(-1000, 1000))
-		#for id in line_dict:
-		#	line = line_dict[id]
-		#	y = [x*line[0]+line[1] for x in xs]
-		#	pl.plot(xs, y)
-		#pl.savefig('foo.png')
-		# end of graph part
 		sequence = find_line_sequence(line_dict, [(steepest_line, -999999)])
 		interval_stats_dict = {}
 		for candidate, interval_start, interval_end in sequence:
@@ -145,8 +135,5 @@ for n in range(0,10):
 		param_dict = run_param_dict
 		best_BLEU = current_BLEU
 
-#print 'Initial weights: {}'.format(initial_weights)
 weights = ' '.join(["{}={}".format(feat, param_dict[feat]) for feat in param_dict])
 os.system("python rerank -k {} -w '{}'".format(opts.input, weights))
-#print iteration
-print best_BLEU

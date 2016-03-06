@@ -6,9 +6,10 @@ When training and testing on the development set, the best BLEU score achieved w
 
 When trained on the training set and tested on development set, our reranker achieves 27.41 BLEU score.
 
-When reranker is trained on the training set extended with the length feature the BLUE score is 28.44.
+When reranker is trained on the training set extended with the length feature the BLUE score on development set is 28.67.
 
-The command to run our reranker is
+Our modified reranker should be run in a directory in which reranker is saved. The command is
 \begin{lstlisting}
 python my_rerank -t <training data> -r <training references> -k <test data>
 \end{lstlisting}
+Modified training and test files have been submitted.
