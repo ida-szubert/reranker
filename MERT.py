@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 import optparse
 import bleu
+import os
 import matplotlib.pylab as pl
 import numpy as np
 import random
 
 optparser = optparse.OptionParser()
-optparser.add_option("-k", "--kbest-list", dest="input", default="data/train.100best", help="100-best translation lists")
-optparser.add_option("-r", "--reference", dest="reference", default="data/train.ref", help="Target language reference sentences")
+optparser.add_option("-t", "--kbest-training-list", dest="training_input", default="data/train.100best", help="100-best training translation lists")
+optparser.add_option("-r", "--reference", dest="reference", default="data/train.ref", help="Training target language reference sentences")
+optparser.add_option("-k", "--kbest-list", dest="input", default="data/dev+test.100best", help="100-best testing translation lists")
 (opts, _) = optparser.parse_args()
 
 
@@ -15,7 +17,7 @@ def get_reference_sentences():
 	return [line.strip().split() for line in open(opts.reference)]
 
 def get_candidate_translations():
-	return [hyp.split(' ||| ') for hyp in open(opts.input)]
+	return [hyp.split(' ||| ') for hyp in open(opts.training_input)]
 
 def update_param(feature, current_param_dict):
 	sentence_dict = {}
@@ -39,8 +41,10 @@ def update_param(feature, current_param_dict):
 
 	all_interval_ends = sorted(set([item[1] for sublist in [dict.keys() for dict in sentence_dict.values()] for item in sublist]))
 	best_interval, best_BLEU = choose_best_interval(all_interval_ends, sentence_dict)
-	current_param_dict[feature] = sum(best_interval)/2
-	return current_param_dict, best_BLEU
+	return_param_dict = {}
+	for f in current_param_dict:
+		return_param_dict[f] = current_param_dict[f] if f != feature else sum(best_interval)/2
+	return return_param_dict, best_BLEU
 
 def choose_best_interval(interval_ends, sentence_dict):
 	current_best = 0
@@ -111,22 +115,38 @@ all_hyps = get_candidate_translations()
 num_sents = len(reference)
 
 param_dict = {}
-_, _, feats = all_hyps[0]
-for feat in feats.split():
-	k,_ = feat.split('=')
-	param_dict[k] = 1
+best_BLEU = 0
 
-update_order = random.sample(param_dict.keys(), len(param_dict.keys()))
-current_BLEU = 0
-next_BLEU = 1
-iteration = 0
-while iteration < 101:
-#while next_BLEU - current_BLEU > 0.0001:
-	current_BLEU = next_BLEU
-	dict, BLEU = update_param(update_order[iteration % len(update_order)], param_dict)
-	param_dict = dict
-	next_BLEU = BLEU
-	iteration += 1
+for n in range(0,10):
+	run_param_dict = {}
+	_, _, feats = all_hyps[0]
+	for feat in feats.split():
+		k,_ = feat.split('=')
+		run_param_dict[k] = random.randint(-10, 10)
+		initial_weights = ' '.join(["{}={}".format(feat, run_param_dict[feat]) for feat in run_param_dict])
 
-print param_dict
-print next_BLEU
+	update_order = random.sample(run_param_dict.keys(), len(run_param_dict.keys()))
+	previous_BLEU = 0
+	current_BLEU = 1
+	iteration = 0
+	last_updated = ''
+	to_update = [f for f in update_order if f != last_updated]
+
+	while current_BLEU - previous_BLEU > 0.0001:
+		previous_BLEU = current_BLEU
+		improvements = [(feat, update_param(feat, run_param_dict)) for feat in to_update]
+		best = sorted(improvements, key=lambda x: x[1][1])[-1]
+		current_BLEU = best[1][1]
+		run_param_dict = best[1][0]
+		last_updated = best[0]
+		iteration += 1
+
+	if current_BLEU > best_BLEU:
+		param_dict = run_param_dict
+		best_BLEU = current_BLEU
+
+#print 'Initial weights: {}'.format(initial_weights)
+weights = ' '.join(["{}={}".format(feat, param_dict[feat]) for feat in param_dict])
+os.system("python rerank -k {} -w '{}'".format(opts.input, weights))
+#print iteration
+print best_BLEU
