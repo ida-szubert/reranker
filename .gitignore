@@ -6,6 +6,9 @@ data/tmp*
 *.blg
 *.fff
 *.lof
+*.log
+*.lot
+*.ttt
 *.out
 *.Rproj.user
 *.Rproj
@@ -13,3 +16,4 @@ data/tmp*
 *.Rhistory
 .idea/*
 *.R
+.Rproj.user

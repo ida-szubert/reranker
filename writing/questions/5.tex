@@ -1,3 +1,12 @@
 \section*{Q5}
 
+A grid search through all the three features (with weights between -5 and 5) was carried out. The highest BLEU score (28.16, 0.81 higher than default) was achieved with the following configuration of feature weights:
 
+\centerline{p(e) : 2,    p(e|f) : 3,    p\_lex(f|e) : 5}
+
+Qualitatively, the translations chosen with the optimal parameter configuration are generally of better fluency and accuracy. 
+We observe that the translations are more verbose, which is a good thing, given the previously mentioned tendency of the default model to favour too short sentences. Limiting the relative weight of the English language model feature lets the intended meaning of the Russian sentence to be preserved. This is seen in the first example in section \textit{Best parameters} in table~\ref{translation_compare}. The optimal configuration allows the adverb \textit{latest} to be preserved in translation, whereas the default reranker favours an adverb-less version, probably due to it being shorter and having a higher likelihood according to the language model. 
+
+The second example shows how a more precise translation is created in the following case as a more fluent syntax is produced by allowing larger but less frequent clause types.
+   
+However, it does happen that the default reranker chooses a better translation. We noticed that in many cases the outputs of the two rerankers differ only in one synonymous word or phrase. In some cases optimal parameter setting leads to choosing a less English-like paraphrased equivalent of the default translation. This could be a closer match to the original Russian, caused by the heavy weighting of p(e$|$f) and p\_lex(f$|$e), and still reasonably good English due to being in a top 100 candidates. The final example in table~\ref{translation_compare} shows the difference an an example of an inappropriate, although semantically justifiable, verb choice.
