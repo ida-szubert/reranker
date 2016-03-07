@@ -1,26 +1,19 @@
 \section*{Q4}
 
-In comparison to the default reranker, the oracle translations tend to have better BLEU scores. The oracle outputs are intuitively better, but there are still types of Russian constructions which are not dealt with well. Let's look at the first example in table~\ref{translation_compare}.
+The oracle translations tend to have better BLEU scores. The oracle outputs are intuitively better, but not without exceptions. Let's look at the first example in section \textit{Oracle} of table~\ref{translation_compare}.
   
-The oracle translation is more precise and accounts for the English distinction between \textit{house} and \textit{home} by choosing the phrase \textit{residents of the house}, rather than \textit{home}. However, the preferred preposition of \textit{the stairwell} was correctly chosen by the default reranker and not by the oracle.
-Similarly in the second and third example, the oracle provides a more fluent translation, being able to create a fully formed sentence made up of complex clause types - relatively rare or infrequent syntax.
+The oracle translation, on top of from not omitting \textit{the residents}, accounts for the English distinction between \textit{house} and \textit{home}. However, the preferred preposition of \textit{the stairwell} was correctly chosen by the default reranker and not by the oracle.
+Similarly in the second and third example, the oracle provides a more fluent translation, being able to create a fully formed sentence made up of complex clause types.
 
-However, aside from these particular improvements, there are many sentences that are still not good translations. These occur particularly with sentences with rare special characters, as in \textit{"including an option to buy 20 more planes , total volume , in fact , the \$ 26 billion ."}.
+However, there are still many less-than-good translations. These occur inter alia when sentences have rare special characters (example five); Russian conventions for comparatives are retained, resulting in poorly-formed English sentences (example six); sentence is longer, with more complex clausal structure is (example seven).
 
-Further, Russian conventions for comparative constructions are retained in the translation, resulting in poorly-formed English sentences, e.g.  \textit{"but residents complaining of the dirt and noise , in many communities is becoming more and more ."}
+Since the oracle's aim it to maximize BLEU by choosing from the provided top candidates, the above shortcomings likely reflect both the deficiencies of the decoder (and statistical models) used to produce the candidates and of BLEU as a metric of translation quality. Sometimes there are no good translations among the candidates, as for the sentence about 20 planes. In other cases, illustrated by example four in table~\ref{translation_compare}, even though the choice of the default reranker is clearly better, its BLUE score is lower.
 
-Similarly, longer and more complex multi-clausal sentences tend to be problematic: \textit{"all four birds used the wire to make and used hooks hooks , to a bucket for pen and pull him out of the cylinder"}
-
-Since the oracle chooses translations out of the 100 provided candidates so that the BLUE score for the whole set is maximized, the shortcomings of oracle's outputs likely reflect the shortcomings of the decoder, translation models, and language model used to produce the translations. For instance, no good translation ca be found among the top 100 for the sentence describing the \$26 billion plane-buying event.
-Alternatively, we might interpret the badness of the chosen translations as indicating that the BLUE metric is not that well aligned with actual translation quality. An illustration of this point is offered by example four in table~\ref{translation_compare}. Even though the choice of the default reranker is clearly better, its BLUE score is lower.
-
-To decide how much blame to ascribe to each explanation we can subjectively pick the best candidate translations and see in how many cases does the oracle agree with our choice.
-
-\begin{table}
-	\centering
-	\begin{tabular}{||c|c||}
+%\begin{longtable}
+%	\centering
+	\begin{longtable}{||c|c||}
 	\hline
-	Default & Flipped LM\\
+	\textbf{Default} & \textbf{Flipped LM}\\
 	\hline
 	\parbox{7cm}{\vspace{.5\baselineskip} "cold and inhuman": anders беринг\\breivik first publicly trial\vspace{.5\baselineskip}} &
 	\parbox{7cm}{\vspace{.5\baselineskip} "cold and inhuman": anders fogh\\беринг breivik publicly appears before\\by the court for the first time"\vspace{.5\baselineskip}}\\
@@ -37,7 +30,7 @@ To decide how much blame to ascribe to each explanation we can subjectively pick
 	\parbox{7cm}{\vspace{.5\baselineskip} you need to keep in mind 5,000\\these concepts, ideas - them all together.\vspace{.5\baselineskip}}&
 	\parbox{7cm}{\vspace{.5\baselineskip} you need to keep in the head\\of the 5,000 of ideas - these concepts,\\combining them all together...\vspace{.5\baselineskip}}\\
 	\hline
-	Default & Oracle\\
+	\textbf{Default} & \textbf{Oracle}\\
 	\hline
 	\parbox{7cm}{\vspace{.5\baselineskip} the police statement reported that\\the home noticed smoke in\\the apartment stairwell and... \vspace{.5\baselineskip}} &
 	\parbox{7cm}{\vspace{.5\baselineskip} police in a statement reported that\\residents of the house noticed\\smoke on the apartment stairwell and... \vspace{.5\baselineskip}}\\
@@ -51,7 +44,13 @@ To decide how much blame to ascribe to each explanation we can subjectively pick
 	\parbox{7cm}{\vspace{.5\baselineskip} two 19 - year - old tried to help\\young people, but were\\immediately beaten by four men. \vspace{.5\baselineskip}}&
 	\parbox{7cm}{\vspace{.5\baselineskip} two 19 - year - olds young people\\trying to help, but were\\just beaten by the four men. \vspace{.5\baselineskip}}\\
 	\hline
-	Deafult & Best parameters\\
+	 & \parbox{7cm}{\vspace{.5\baselineskip}including an option to buy 20 more\\planes, total volume, in fact,\\the \$26 billion.\vspace{.5\baselineskip}}\\
+	 \hline
+	 & \parbox{7cm}{\vspace{.5\baselineskip}but residents complaining of the dirt\\and noise, in many communities\\is becoming more and more.\vspace{.5\baselineskip}}\\
+	 \hline
+	 & \parbox{7cm}{\vspace{.5\baselineskip}all four birds used the wire to make\\and used hooks hooks, to\\a bucket for pen and pull\\him out of the cylinder\vspace{.5\baselineskip}}\\
+	\hline
+	\textbf{Deafult} & \textbf{Best parameters}\\
 	\hline
 	\parbox{7cm}{\vspace{.5\baselineskip} the training took place late on\\monday on...\vspace{.5\baselineskip}}&
 	\parbox{7cm}{\vspace{.5\baselineskip} the latest training took place late\\on monday on...\vspace{.5\baselineskip}}\\
@@ -62,6 +61,7 @@ To decide how much blame to ascribe to each explanation we can subjectively pick
 	\parbox{7cm}{\vspace{.5\baselineskip} facebook also draws all kinds of data\\about its users. \vspace{.5\baselineskip}}&
 	\parbox{7cm}{\vspace{.5\baselineskip} facebook also constantly pulls all sorts\\of data about its users.\vspace{.5\baselineskip}}\\
 	\hline
-	\end{tabular}
 	\caption{Comparison of outputs of the reranker with different configurations.}\label{translation_compare}
-\end{table}
+	\end{longtable}
+	%\caption{Comparison of outputs of the reranker with different configurations.}\label{translation_compare}
+%\end{longtable}

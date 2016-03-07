@@ -1,15 +1,32 @@
 \section*{Q7}
-We decided to implement the Minimum Error Training Rate algorithm for choosing optimal model parameter values, described in \cite{och2003}. While with only 3 (or 4, counting translation length) features tuning the weights by hand is feasible, in principle the number of features could be much larger. Since we want to set the model weights so that the best translations achieve the highest model scores, we need a criterion for goodness of translation, aka an error function. In essence we want to tune the weights so that highest scoring translations contain the least errors as compared to reference. We chose the use BLEU as the error function. We apply the METR implementation to learn the optimal parameters on the training data, and supply these parameters to the reranker for use on the test data.
-For the MERT algorithm itself two variables are important: the initial parameter values and the stopping criterion. We start at a point whose coordinates are randomly chosen from the range -10 to 10. At each iteration we try optimising each of the parameters and change the one whose optimisation improves BLEU the most. With a fixed iteration order over parameters we faced situations where no improvement in BLEU could be obtained by optimising one parameter, and the algorithm stopped, even though improvements would be achieved if other parameters were tried. Our strategy avoids that, however we recognize that it would not be prudent in case of the parameters being more numerous.
+We decided to implement the Minimum Error Training Rate algorithm for choosing optimal model parameter values, described in \cite{och2003}. The aim of weight tuning is to make the best translations achieve the highest model scores. In this assignment we use BLEU as the measure of translation goodness. While with only 4 features hand-tuning is feasible, in principle the number could be much larger, requiring a principled method of searching through the parameter space. We apply MERT to learn the optimal weights of p(e), p(e$|$f), p\_lex(f$|$e), and len features from the training data. These weights are supplied to the reranker for use on the test data.
 
-When training and testing on the development set, the best BLEU score achieved was 28.35, which constitutes an improvement of 0.19 compared to when parameters were picked by hand. The algorithm converges in less than 10 iterations. However, due to random initialisation of parameter values, sometime the combination yielding the best BLEU score is not found. Therefore, our reranker involves 10 runs of MERT algorithm, out of which we choose the best.
+For the MERT algorithm itself two variables are important: the stopping criterion and initial parameter values. We stop when improvement in BLEU from previous iteration is less than 0.0001. We start at a point whose coordinates are randomly chosen from the range -10 to 10. At each iteration we try optimising each of the parameters and change the one whose optimisation improves BLEU the most. This strategy avoids premature stopping, however we recognize that it would not necessarily be prudent in case of a large number of parameters. The algorithm converges in less than 10 iterations. However, due to random initialisation of parameter values, sometimes the combination yielding the best BLEU score is not found. Therefore, our reranker involves 10 runs of MERT, out of which we choose the best one.
 
-When trained on the training set and tested on development set, our reranker achieves 27.41 BLEU score.
+\begin{table}
+	\centering
+	\begin{tabular}{||c|c|c|c|c||}
+		\hline
+		\parbox[c]{1.5cm}{\vspace{.5\baselineskip}\textbf{no. of}\\\textbf{features}\vspace{.5\baselineskip}} & \parbox{2cm}{\vspace{.5\baselineskip} \textbf{parameter\\setting\\method}\vspace{.5\baselineskip}} & \textbf{training set} & \textbf{testing set} & \textbf{BLEU}\\
+		\hline
+		3 & default & - & dev & 27.35\\
+		3 & hand-picked & - & dev & 28.16\\
+		3 & MERT & dev & dev & 28.25\\
+		3 & MERT & train & dev & 27.41\\
+		\hline
+		4 & default & - & dev & 27.99\\
+		4 & hand-picked & - & dev & 28.57\\ 
+		4 & MERT & dev & dev & 29.09\\
+		4 & MERT & train & dev & 28.67\\
+		\hline
+	\end{tabular}
+	\caption{BLEU scores as dependent on method of feature weight setting and number of features used (4: with len feature included)}\label{BLEU-comparison}
+\end{table}
 
-When reranker is trained on the training set extended with the length feature the BLUE score on development set is 28.67.
+Table~\ref{BLEU-comparison} shows how our MERT compares to other parameter-setting methods. Our reranker trained on the training set extended with length feature scored 28.67 on the development set, an improvement of 1.32 from the baseline.
 
 Our modified reranker should be run in a directory in which reranker is saved. The command is
 \begin{lstlisting}
 python my_rerank -t <training data> -r <training references> -k <test data>
 \end{lstlisting}
-Modified training and test files have been submitted.
+Training and dev+test files extended with len feature have been submitted.

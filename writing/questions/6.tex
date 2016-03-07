@@ -1,8 +1,6 @@
 \section*{Q6}
 When other parameters are kept at 1, the best BLEU (28.57) is achieved with length feature weighted by 2.4. When the optimum weights from Q5 are used, the best choice for the length weight is 4.1, with BLEU 28.50.
 
-However, when features are added, optimum parameter values are bound to change. According to our modified reranker from Q7, good settings of the four parameters are:
-\centerline{p(e) : 2    p(e|f) : 8.69    p\_lex(f|e) : 4    len:6.49}
-
 The lengths of the chosen translations, both when other parameters were set to 1 and when they had their optimum values, are quite close to reference: 11171 and 11187 words as compared to the reference length of 11280.
 
+When features are added, optimum parameter values are bound to change. Using one of the good parameter combinations found by our modified reranker from Q7 the length of the translations is 11273, even closer to the reference.
